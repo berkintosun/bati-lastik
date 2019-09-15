@@ -5,14 +5,16 @@ const UserModel = require('../models/User');
 //Create a passport middleware to handle user registration
 passport.use('signup', new localStrategy({
   usernameField : 'email',
-  passwordField : 'password'
+  passwordField : 'password',
 }, async (email, password, done) => {
     try {
+        console.log("anan");
       //Save the information provided by the user to the the database
       const user = await UserModel.create({ email, password });
       //Send the user information to the next middleware
       return done(null, user);
     } catch (error) {
+        console.log("asdads");
       done(error);
     }
 }));
@@ -20,7 +22,8 @@ passport.use('signup', new localStrategy({
 //Create a passport middleware to handle User login
 passport.use('login', new localStrategy({
   usernameField : 'email',
-  passwordField : 'password'
+  passwordField : 'password',
+  passReqToCallback: true
 }, async (email, password, done) => {
   try {
     //Find the user associated with the email provided by the user
@@ -39,5 +42,24 @@ passport.use('login', new localStrategy({
     return done(null, user, { message : 'Logged in Successfully'});
   } catch (error) {
     return done(error);
+  }
+}));
+
+const JWTstrategy = require('passport-jwt').Strategy;
+//We use this to extract the JWT sent by the user
+const ExtractJWT = require('passport-jwt').ExtractJwt;
+
+//This verifies that the token sent by the user is valid
+passport.use(new JWTstrategy({
+  //secret we used to sign our JWT
+  secretOrKey : 'batilastikBerkin',
+  //we expect the user to send the token as a query paramater with the name 'jwt_token'
+  jwtFromRequest : ExtractJWT.fromUrlQueryParameter('jwt_token')
+}, async (token, done) => {
+  try {
+    //Pass the user details to the next middleware
+    return done(null, token.user);
+  } catch (error) {
+    done(error);
   }
 }));

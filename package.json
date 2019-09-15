@@ -2,7 +2,7 @@
   "name": "bati-lastik",
   "version": "1.0.0",
   "description": "Application for Batı Lastik company. This application allows to distribute the work equally between the workers and analyse the actual working time and give brief information about the daily business.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
