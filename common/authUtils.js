@@ -2,7 +2,7 @@ import { getClientDetails } from '../services/ClientService';
 import jwt from 'jsonwebtoken';
 const newSessionRoutes = [{ path: '/user/login', method: 'POST' }];
 const authRoutes = [{ path: '/user/password', method: 'PUT' }];
-const SECRET_KEY = "JWT_SECRET";
+const SECRET_KEY = "BatiLastikBerkin";
 
 export const clientApiKeyValidation = async (req, res, next) => {
 
