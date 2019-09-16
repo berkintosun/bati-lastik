@@ -1,31 +1,66 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const passport = require('passport');
-const app = express();
-const UserModel = require('./models/User');
+import express from 'express';
+import bodyParser from 'body-parser';
+import user from './routes/user';
+import {MongoClient} from 'mongodb';
+import {clientApiKeyValidation} from './common/authUtils';
 
-mongoose.connect('mongodb://127.0.0.1:27017/batilastik', { useMongoClient : true });
-mongoose.connection.on('error', error => console.log(error) );
-mongoose.Promise = global.Promise;
+const CONN_URL = 'mongodb://localhost:27017';
+let mongoClient = null;
 
-require('./auth/Auth');
+MongoClient.connect(CONN_URL,{ useNewUrlParser: true }, function (err, client) {
+    mongoClient = client;
+})
 
-app.use( bodyParser.urlencoded({ extended : false }) );
+let app = express();
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+// parse application/json
+app.use(bodyParser.json());
 
-const routes = require('./routes/Routes');
-const secureRoute = require('./routes/SecureRoutes');
-
-app.use('/', routes);
-//We plugin our jwt strategy as a middleware so only verified users can access this route
-app.use('/user', passport.authenticate('jwt', { session : false }), secureRoute );
-
-//Handle errors
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.json({ error : err });
+app.use((req,res,next)=>{
+    req.db = mongoClient.db('test');
+    next();
 });
 
-app.listen(3000, () => {
-  console.log('Server started')
+app.use(clientApiKeyValidation);
+
+app.get('/',(req,res,next)=>{
+    res.status(200).send({
+        status:true,
+        response:'Hello World!'
+    });
 });
+
+app.use('/user',user);
+
+app.use((req, res, next) => {
+    if (!res.data) {
+        return res.status(404).send({
+            status: false,
+            error: {
+                reason: "Invalid Endpoint", 
+                code: 404
+            }
+        });
+    }
+
+    res.status(res.statusCode || 200).send({ status: true, response: res.data });
+})
+
+app.listen(30006,()=>{
+    console.log(' ********** : running on 30006');
+})
+
+process.on('exit', (code) => {
+    mongoClient.close();
+    console.log(`About to exit with code: ${code}`);
+});
+
+
+process.on('SIGINT', function() {
+    console.log("Caught interrupt signal");
+    process.exit();
+});
+
+
+module.exports = app;
