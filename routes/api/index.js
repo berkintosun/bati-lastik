@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const router = require('express').Router()    
 const UsersRouter = require('./users');
+const JobsRouter = require('./jobs');
 
 router.use((req, res, next) => {
     console.log(req.headers);
@@ -29,5 +30,6 @@ router.use((req, res, next) => {
 })
 
 router.use('/users', UsersRouter)
+router.use('/jobs', JobsRouter)
 
 module.exports = router
