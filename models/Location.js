@@ -3,27 +3,23 @@ const Schema = mongoose.Schema;
 
 // Schema
 
-const userSchema = new Schema({
-    name:{
+const locationSchema = new Schema({
+    userId:{
+        type:Number,
+        required:true
+    },
+    Lat:{
         type:String,
         required:true
     },
-    email:{
-        type:String,
-        required:true
-    },
-    password:{
+    Long:{
         type:String,
         required:true
     },
     date:{
         type:Date,
         default:Date.now
-    },
-    available:{
-        type:Boolean,
-        default:true
     }
 });
 
-mongoose.model('users',userSchema);
+mongoose.model('location',locationSchema);

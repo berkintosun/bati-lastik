@@ -1,23 +1,26 @@
 {
   "name": "bati-lastik",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Application for Batı Lastik company. This application allows to distribute the work equally between the workers and analyse the actual working time and give brief information about the daily business.",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/berkintosun/bati-lastik.git"
+  },
   "author": "Berkin Tosun",
   "license": "MIT",
-  "dependencies": {
-    "body-parser": "^1.18.3",
-    "express": "^4.16.4",
-    "jsonwebtoken": "^8.5.1",
-    "mongodb": "^3.1.10"
+  "bugs": {
+    "url": "https://github.com/berkintosun/bati-lastik/issues"
   },
-  "devDependencies": {
-    "@babel/core": "^7.2.2",
-    "@babel/polyfill": "^7.2.5",
-    "@babel/preset-env": "^7.2.3",
-    "@babel/register": "^7.0.0"
+  "homepage": "https://github.com/berkintosun/bati-lastik#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.6.5"
   }
 }
